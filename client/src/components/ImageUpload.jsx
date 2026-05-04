@@ -10,12 +10,17 @@ const ImageUpload = ({ value, onChange, className }) => {
   const [error, setError] = useState('');
   const inputRef = useRef(null);
 
+  const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+  const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+
   const handleFile = async (file) => {
     if (!file) return;
+
     if (!file.type.startsWith('image/')) {
       setError('Please select an image file (JPG, PNG, WebP)');
       return;
     }
+
     if (file.size > 5 * 1024 * 1024) {
       setError('Image must be smaller than 5MB');
       return;
@@ -24,21 +29,27 @@ const ImageUpload = ({ value, onChange, className }) => {
     setError('');
     setUploading(true);
 
-    // Show local preview immediately
+    // Local preview
     const localUrl = URL.createObjectURL(file);
     setPreview(localUrl);
 
     try {
-      const form = new FormData();
-      form.append('image', file);
-      const res = await axios.post('/api/uploads', form, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-      const serverUrl = res.data.url;
-      setPreview(serverUrl);
-      onChange(serverUrl);
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', UPLOAD_PRESET);
+
+      const res = await axios.post(
+        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+        formData
+      );
+
+      const cloudinaryUrl = res.data.secure_url;
+
+      setPreview(cloudinaryUrl);
+      onChange(cloudinaryUrl);
     } catch (err) {
-      setError(err.response?.data?.error || 'Upload failed');
+      console.error(err);
+      setError('Upload failed');
       onChange(localUrl);
     } finally {
       setUploading(false);
@@ -63,7 +74,9 @@ const ImageUpload = ({ value, onChange, className }) => {
       <div
         className={cn(
           'relative rounded-xl border-2 border-dashed transition-all cursor-pointer group',
-          preview ? 'border-transparent' : 'border-white/10 hover:border-indigo-500/40 bg-white/3 hover:bg-indigo-500/5'
+          preview
+            ? 'border-transparent'
+            : 'border-white/10 hover:border-indigo-500/40 bg-white/3 hover:bg-indigo-500/5'
         )}
         onClick={() => !preview && inputRef.current?.click()}
         onDrop={handleDrop}
@@ -72,6 +85,7 @@ const ImageUpload = ({ value, onChange, className }) => {
         {preview ? (
           <div className="relative rounded-xl overflow-hidden">
             <img src={preview} alt="Preview" className="w-full h-48 object-cover" />
+
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               <button
                 type="button"
@@ -81,6 +95,7 @@ const ImageUpload = ({ value, onChange, className }) => {
                 <X size={14} /> Remove
               </button>
             </div>
+
             {uploading && (
               <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
                 <Loader2 size={20} className="text-white animate-spin" />
@@ -96,6 +111,7 @@ const ImageUpload = ({ value, onChange, className }) => {
                 <Upload size={20} className="text-indigo-400" />
               </div>
             )}
+
             <p className="text-sm font-medium text-white/70 mb-1">
               {uploading ? 'Uploading...' : 'Click or drag & drop'}
             </p>
