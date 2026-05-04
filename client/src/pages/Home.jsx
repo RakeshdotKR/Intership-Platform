@@ -10,7 +10,7 @@ import React from 'react';
 
 const STATS = [
   { value: '500+', label: 'Students Trained', icon: Users },
-  { value: '95%',  label: 'Placement Rate',   icon: TrendingUp },
+  // { value: '95%',  label: 'Placement Rate',   icon: TrendingUp },
   { value: '10+',  label: 'Live Projects',     icon: Code2 },
   { value: '100',  label: 'Seats / Batch',     icon: Award },
 ];
