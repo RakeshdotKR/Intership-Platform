@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int          @id @default(autoincrement())
+  name         String
+  email        String       @unique
+  phone        String
+  college      String?
+  branch       String?
+  year         String?
+  passwordHash String
+  role         Role         @default(STUDENT)
+  enrollments  Enrollment[]
+  createdAt    DateTime     @default(now())
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+model Course {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  image       String   @default("https://static.vecteezy.com/system/resources/previews/027/052/565/non_2x/computer-futuristic-high-tech-circuit-board-with-microcircuits-and-electronic-chips-with-transistors-and-resistors-ai-generated-free-photo.jpg")
+  fee         Float
+  duration    String
+  syllabus    Json
+  techStack   String[]
+  batches     Batch[]
+  createdAt   DateTime @default(now())
+}
+
+model Batch {
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  description String?
+  fee         Float         @default(0)
+  courses     Course[]
+  startDate   DateTime
+  totalSeats  Int           @default(100)
+  status      BatchStatus   @default(NOT_STARTED)
+  enrollments Enrollment[]
+  createdAt   DateTime      @default(now())
+}
+
+enum BatchStatus {
+  NOT_STARTED
+  ONGOING
+  COMPLETED
+}
+
+model Enrollment {
+  id        Int               @id @default(autoincrement())
+  student   User              @relation(fields: [studentId], references: [id])
+  studentId Int
+  batch     Batch             @relation(fields: [batchId], references: [id])
+  batchId   Int
+  payment   Payment?
+  createdAt DateTime          @default(now())
+}
+
+model Payment {
+  id            Int           @id @default(autoincrement())
+  enrollment    Enrollment    @relation(fields: [enrollmentId], references: [id])
+  enrollmentId  Int           @unique
+  amount        Float
+  status        PaymentStatus @default(PENDING)
+  transactionId String?
+  paidAt        DateTime?
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
