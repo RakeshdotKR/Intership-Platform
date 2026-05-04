@@ -36,7 +36,7 @@ const Navbar = () => {
 
   const navLinks = [
     { to: '/courses', label: 'Courses', icon: BookOpen },
-    { to: '/batches', label: 'Batches', icon: Calendar },
+    //{ to: '/batches', label: 'Batches', icon: Calendar },
   ];
 
   return (
