@@ -1,6 +1,6 @@
 # 🎓 InternHub — Internship Registration & Learning Platform
 
-> A full-stack ed-tech web application for managing internship registrations, student enrollments, batch lifecycle, and course delivery — inspired by [UnifiedMentor](https://unifiedmentor.com/).
+> A full-stack ed-tech web application for managing internship registrations, student enrollments, batch lifecycle, and course delivery.
 
 ---
 
