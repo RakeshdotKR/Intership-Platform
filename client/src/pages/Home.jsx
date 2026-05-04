@@ -105,7 +105,7 @@ export default function Home() {
       </section>
 
       {/* Stats */}
-      <section className="py-16 border-y border-slate-200 dark:border-white/6">
+      <section className="mx-auto max-w-7xl py-16 border-y border-slate-200 dark:border-white/6">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {STATS.map(({ value, label, icon: Icon }) => (
@@ -243,12 +243,12 @@ export default function Home() {
             <div className="relative">
               <Badge variant="default" className="mb-6">Limited Seats Available</Badge>
               <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4 dark:text-white">
-                Only 100 Seats Per Batch
+                Limited Seats Per Batch
               </h2>
-              <p className="text-slate-500 mb-3 text-lg dark:text-white/50">
+              {/* <p className="text-slate-500 mb-3 text-lg dark:text-white/50">
                 Fee: <span className="text-slate-900 font-semibold dark:text-white">₹4,500</span>
                 <span className="text-slate-400 ml-2 text-sm dark:text-white/30">(Includes certification + placement support)</span>
-              </p>
+              </p> */}
               <p className="text-slate-400 text-sm mb-8 dark:text-white/30">Don't miss your chance — seats fill up fast.</p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link to="/register">
