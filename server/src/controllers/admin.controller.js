@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const bcrypt = require('bcryptjs');
 
 const prisma = new PrismaClient();
 
@@ -83,4 +84,61 @@ const exportStudentsByBatch = async (req, res) => {
   }
 };
 
-module.exports = { getStats, getAllStudents, exportStudentsByBatch };
+const createStudent = async (req, res) => {
+  try {
+    const { name, email, phone, college, branch, year, password } = req.body;
+    if (!name || !email || !password) {
+      return res.status(400).json({ error: 'Name, email, and password are required.' });
+    }
+    const existing = await prisma.user.findUnique({ where: { email } });
+    if (existing) {
+      return res.status(400).json({ error: 'Email already registered.' });
+    }
+    const passwordHash = await bcrypt.hash(password, 10);
+    const student = await prisma.user.create({
+      data: { name, email, phone: phone || '', college, branch, year, passwordHash, role: 'STUDENT' },
+      select: { id: true, name: true, email: true, phone: true, college: true, branch: true, year: true, createdAt: true, enrollments: { include: { batch: { include: { courses: true } }, payment: true } } },
+    });
+    res.status(201).json({ student });
+  } catch (error) {
+    console.error('Create student error:', error);
+    res.status(500).json({ error: 'Failed to create student' });
+  }
+};
+
+const updateStudent = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, email, phone, college, branch, year } = req.body;
+    const existing = await prisma.user.findFirst({ where: { email, NOT: { id: parseInt(id) } } });
+    if (existing) {
+      return res.status(400).json({ error: 'Email already in use by another account.' });
+    }
+    const student = await prisma.user.update({
+      where: { id: parseInt(id) },
+      data: { name, email, phone, college, branch, year },
+      select: { id: true, name: true, email: true, phone: true, college: true, branch: true, year: true, createdAt: true, enrollments: { include: { batch: { include: { courses: true } }, payment: true } } },
+    });
+    res.json({ student });
+  } catch (error) {
+    console.error('Update student error:', error);
+    res.status(500).json({ error: 'Failed to update student' });
+  }
+};
+
+const deleteStudent = async (req, res) => {
+  try {
+    const userId = parseInt(req.params.id);
+    const enrollments = await prisma.enrollment.findMany({ where: { studentId: userId }, select: { id: true } });
+    const enrollmentIds = enrollments.map((e) => e.id);
+    await prisma.payment.deleteMany({ where: { enrollmentId: { in: enrollmentIds } } });
+    await prisma.enrollment.deleteMany({ where: { studentId: userId } });
+    await prisma.user.delete({ where: { id: userId } });
+    res.json({ message: 'Student deleted successfully' });
+  } catch (error) {
+    console.error('Delete student error:', error);
+    res.status(500).json({ error: 'Failed to delete student' });
+  }
+};
+
+module.exports = { getStats, getAllStudents, exportStudentsByBatch, createStudent, updateStudent, deleteStudent };

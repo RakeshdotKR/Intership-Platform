@@ -133,12 +133,12 @@ const Batches = () => {
 
       {/* Content */}
       <div className="container mx-auto px-4 sm:px-6 py-10">
-        {!loading && (
+        {/* {!loading && (
           <p className="text-sm text-muted-foreground mb-6">
             {filtered.length} batch{filtered.length !== 1 ? 'es' : ''} available
             {search && <span> for "<span className="text-foreground/70">{search}</span>"</span>}
           </p>
-        )}
+        )} */}
 
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -149,7 +149,7 @@ const Batches = () => {
             <div className="w-16 h-16 rounded-2xl bg-muted/50 border border-border flex items-center justify-center mb-4">
               <Calendar size={24} className="text-muted-foreground/30" />
             </div>
-            <h3 className="text-lg font-medium text-foreground mb-2">No batches found</h3>
+            <h3 className="text-lg font-medium text-foreground mb-2">No batches found</h3>  
             <p className="text-sm text-muted-foreground">
               {search ? `No results for "${search}".` : 'No active batches available right now.'}
             </p>
@@ -167,7 +167,7 @@ const Batches = () => {
               const seats = batch.seatsLeft ?? (batch.totalSeats - (batch.enrollments?.length || batch.enrolledCount || 0));
               const startDate = batch.startDate
                 ? new Date(batch.startDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
-                : 'TBD';
+                : 'Starting soon';
 
               return (
                 <Card key={batch.id} className="flex flex-col hover:border-indigo-500/30 transition-all hover:-translate-y-0.5">

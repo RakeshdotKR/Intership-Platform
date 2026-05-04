@@ -36,7 +36,7 @@ const BatchDetailModal = ({ enrollment, onClose }) => {
   const statusCfg = STATUS_CONFIG[batch?.status] || STATUS_CONFIG.NOT_STARTED;
 
   const fmt = (d) =>
-    d ? new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'TBD';
+    d ? new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Starting soon';
 
   return (
     <>
@@ -253,7 +253,7 @@ const StudentDashboard = () => {
                 const statusCfg = STATUS_CONFIG[batch?.status] || STATUS_CONFIG.NOT_STARTED;
                 const startDate = batch?.startDate
                   ? new Date(batch.startDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
-                  : 'TBD';
+                  : 'Starting soon';
 
                 return (
                   <Card key={enrollment.id} className="flex flex-col hover:border-slate-300 dark:hover:border-white/10 transition-all overflow-hidden">

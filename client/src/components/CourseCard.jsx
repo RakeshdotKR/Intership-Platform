@@ -17,7 +17,7 @@ const PLACEHOLDER_COLORS = [
 const CourseCard = ({ course, index = 0 }) => {
   const batch = course.batches?.[0];
   const seatsLeft = batch ? batch.totalSeats - (batch.enrollments?.length || batch.enrolledCount || 0) : null;
-  const startDate = batch?.startDate ? new Date(batch.startDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'TBD';
+  const startDate = batch?.startDate ? new Date(batch.startDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Starting soon';
   const colorClass = PLACEHOLDER_COLORS[index % PLACEHOLDER_COLORS.length];
 
   return (

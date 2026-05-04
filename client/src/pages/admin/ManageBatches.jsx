@@ -206,7 +206,7 @@ const ManageBatches = () => {
                       {/* Courses */}
                       <div className="flex flex-wrap gap-1.5 mb-2">
                         {batch.courses?.map(c => (
-                          <span key={c.id} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+                          <span key={c.id} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs bg-indigo-500/10 border border-indigo-500/20 text-indigo-500 dark:text-indigo-400">
                             <BookOpen size={10} /> {c.title}
                           </span>
                         ))}
@@ -267,7 +267,7 @@ const ManageBatches = () => {
       {detailBatch && (
         <>
           <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm" onClick={() => setDetailBatch(null)} />
-          <div className="fixed left-1/2 top-1/2 z-50 w-full max-w-2xl max-h-[85vh] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-card flex flex-col shadow-2xl">
+          <div className="fixed left-1/2 top-1/2 z-50 w-full max-w-2xl max-h-[85vh] -translate-x-1/2 dark:bg-black/60 bg-white/90 -translate-y-1/2 rounded-2xl border border-border bg-card flex flex-col shadow-2xl">
             <div className="flex items-start justify-between p-6 border-b border-border shrink-0">
               <div>
                 <h2 className="text-lg font-semibold text-foreground">{detailBatch.name}</h2>
@@ -288,7 +288,7 @@ const ManageBatches = () => {
                 </div>
                 <div className="flex flex-wrap gap-1.5 mt-2">
                   {detailBatch.courses?.map(c => (
-                    <span key={c.id} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+                    <span key={c.id} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs bg-indigo-500/10 border border-indigo-500/20 text-indigo-500 dark:text-indigo-400">
                       <BookOpen size={10} /> {c.title}
                     </span>
                   ))}
@@ -322,7 +322,7 @@ const ManageBatches = () => {
                     return (
                       <div key={enrollment.id} className="flex items-center justify-between gap-4 p-3.5 rounded-xl bg-muted/20 border border-border">
                         <div className="flex items-center gap-3 min-w-0">
-                          <div className="w-8 h-8 rounded-full bg-indigo-500/20 border border-indigo-500/20 flex items-center justify-center text-xs font-bold text-indigo-400 shrink-0">
+                          <div className="w-8 h-8 rounded-full bg-indigo-500/20 border border-indigo-500/20 flex items-center justify-center text-xs font-bold text-indigo-500 dark:text-indigo-400 shrink-0">
                             {s?.name?.charAt(0)?.toUpperCase()}
                           </div>
                           <div className="min-w-0">
