@@ -30,7 +30,7 @@ const Login = () => {
     try {
       const result = await login(formData.email, formData.password);
       if (result.success) {
-        navigate(result.user?.role === 'ADMIN' ? '/admin' : '/dashboard');
+        navigate(result.user?.role === 'ADMIN' ? '/admin' : '/');
       } else {
         setError(result.error || 'Invalid email or password');
       }
