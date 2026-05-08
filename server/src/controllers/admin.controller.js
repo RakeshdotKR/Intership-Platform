@@ -10,13 +10,14 @@ const getStats = async (req, res) => {
     const payments = await prisma.payment.findMany({ where: { status: 'SUCCESS' } });
     const totalRevenue = payments.reduce((sum, p) => sum + p.amount, 0);
 
-    const activeBatches = await prisma.batch.count({
-      where: { status: { in: ['NOT_STARTED', 'ONGOING'] } },
-    });
+    const [upcomingBatches, ongoingBatches, completedBatches, totalBatches] = await Promise.all([
+      prisma.batch.count({ where: { status: 'NOT_STARTED' } }),
+      prisma.batch.count({ where: { status: 'ONGOING' } }),
+      prisma.batch.count({ where: { status: 'COMPLETED' } }),
+      prisma.batch.count(),
+    ]);
 
-    const completedBatches = await prisma.batch.count({ where: { status: 'COMPLETED' } });
-
-    res.json({ stats: { totalStudents, totalRevenue, activeBatches, completedBatches } });
+    res.json({ stats: { totalStudents, totalRevenue, upcomingBatches, ongoingBatches, completedBatches, totalBatches } });
   } catch (error) {
     console.error('Get stats error:', error);
     res.status(500).json({ error: 'Failed to fetch stats' });

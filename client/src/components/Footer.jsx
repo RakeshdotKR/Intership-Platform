@@ -98,7 +98,7 @@ const Footer = () => {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-slate-400 dark:text-white/30">&copy; {year} InternHub. All rights reserved.</p>
           <div className="flex items-center gap-4">
-            {['Privacy Policy', 'Terms of Service', 'Refund Policy'].map((item) => (
+            {['Privacy Policy', 'Terms of Service'].map((item) => (
               <Link key={item} to="/" className="text-xs text-slate-400 hover:text-slate-600 transition-colors dark:text-white/30 dark:hover:text-white/60">
                 {item}
               </Link>

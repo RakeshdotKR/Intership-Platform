@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
@@ -9,8 +9,14 @@ import { Skeleton } from '../components/ui/skeleton';
 import { Separator } from '../components/ui/separator';
 import {
   Clock, IndianRupee, Users, CalendarDays, CheckCircle2, BookOpen,
-  ArrowLeft, X, Shield, Award, ChevronDown, ChevronUp
+  ArrowLeft, X, Shield, Award, ChevronDown, ChevronUp, ChevronLeft, ChevronRight,
 } from 'lucide-react';
+
+const STATUS_BADGE = {
+  NOT_STARTED: { variant: 'info', label: 'Upcoming' },
+  ONGOING: { variant: 'warning', label: 'Ongoing' },
+  COMPLETED: { variant: 'success', label: 'Completed' },
+};
 import React from 'react';
 
 const DetailSkeleton = () => (
@@ -40,6 +46,8 @@ const CourseDetail = () => {
   const [isAlreadyEnrolled, setIsAlreadyEnrolled] = useState(false);
   const [error, setError] = useState('');
   const [openWeek, setOpenWeek] = useState(0);
+  const [selectedBatch, setSelectedBatch] = useState(null);
+  const sliderRef = useRef(null);
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -47,6 +55,7 @@ const CourseDetail = () => {
         const response = await axios.get(`/api/courses/${id}`);
         const courseData = response.data?.course || response.data;
         setCourse(courseData);
+        setSelectedBatch(courseData.batches?.[0] || null);
 
         if (isAuthenticated) {
           const enrollRes = await axios.get('/api/enrollments/my');
@@ -67,6 +76,7 @@ const CourseDetail = () => {
 
   const handleEnroll = () => {
     if (!isAuthenticated) return navigate('/login');
+    if (!selectedBatch) return;
     setShowPayment(true);
   };
 
@@ -74,7 +84,7 @@ const CourseDetail = () => {
     setEnrolling(true);
     setError('');
     try {
-      const enrollRes = await axios.post('/api/enrollments', { batchId: course.batches[0].id });
+      const enrollRes = await axios.post('/api/enrollments', { batchId: selectedBatch.id });
       // const payRes = await axios.post('/api/payments/initiate', { enrollmentId: enrollRes.data.enrollment.id });
       // await axios.post('/api/payments/confirm', { paymentId: payRes.data.payment.id });
       setEnrolled(true);
@@ -95,7 +105,7 @@ const CourseDetail = () => {
     </div>
   );
 
-  const batch = course.batches?.[0];
+  const batch = selectedBatch;
   const seatsLeft = batch ? batch.totalSeats - (batch.enrollments?.length || batch.enrolledCount || 0) : 0;
   const startDate = batch?.startDate
     ? new Date(batch.startDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
@@ -242,12 +252,108 @@ const CourseDetail = () => {
 
                 <p className="text-xs text-center text-muted-foreground flex items-center justify-center gap-1">
                   <Shield size={11} />
-                  Secure payment • 7-day refund policy
+                  Secure payment
                 </p>
               </CardContent>
             </Card>
           </div>}
         </div>
+
+        {/* Available Batches Slider */}
+        {course.batches?.length > 0 && (
+          <div className="mt-10">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="text-lg font-semibold text-foreground">Available Batches</h2>
+                <p className="text-xs text-muted-foreground mt-0.5">{course.batches.length} batch{course.batches.length !== 1 ? 'es' : ''} · click to select for enrollment</p>
+              </div>
+              {course.batches.length > 1 && (
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => sliderRef.current?.scrollBy({ left: -320, behavior: 'smooth' })}
+                    className="w-8 h-8 rounded-full border border-border flex items-center justify-center hover:bg-muted/50 transition-colors text-muted-foreground hover:text-foreground"
+                  >
+                    <ChevronLeft size={15} />
+                  </button>
+                  <button
+                    onClick={() => sliderRef.current?.scrollBy({ left: 320, behavior: 'smooth' })}
+                    className="w-8 h-8 rounded-full border border-border flex items-center justify-center hover:bg-muted/50 transition-colors text-muted-foreground hover:text-foreground"
+                  >
+                    <ChevronRight size={15} />
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <div
+              ref={sliderRef}
+              className="flex gap-4 overflow-x-auto pb-2 scroll-smooth snap-x snap-mandatory"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              {course.batches.map((b) => {
+                const enrolledCount = b.enrollments?.length || b.enrolledCount || 0;
+                const seatsRemaining = b.totalSeats - enrolledCount;
+                const pct = b.totalSeats > 0 ? Math.round((enrolledCount / b.totalSeats) * 100) : 0;
+                const isSelected = selectedBatch?.id === b.id;
+                const statusInfo = STATUS_BADGE[b.status] || STATUS_BADGE.NOT_STARTED;
+                const isFull = seatsRemaining <= 0;
+
+                return (
+                  <div
+                    key={b.id}
+                    onClick={() => !isFull && b.status !== 'COMPLETED' && setSelectedBatch(b)}
+                    className={`snap-start shrink-0 w-72 rounded-2xl border p-4 transition-all ${
+                      isFull || b.status === 'COMPLETED'
+                        ? 'border-border bg-muted/5 opacity-60 cursor-not-allowed'
+                        : isSelected
+                          ? 'border-indigo-500/50 bg-indigo-500/5 ring-1 ring-indigo-500/30 cursor-pointer'
+                          : 'border-border bg-muted/10 hover:border-border/70 cursor-pointer'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-3">
+                      <Badge variant={statusInfo.variant}>{statusInfo.label}</Badge>
+                      {isSelected && !isFull && b.status !== 'COMPLETED' && (
+                        <span className="text-xs text-indigo-400 font-medium flex items-center gap-1">
+                          <CheckCircle2 size={11} /> Selected
+                        </span>
+                      )}
+                      {isFull && <span className="text-xs text-red-400">Full</span>}
+                    </div>
+
+                    <h3 className="font-semibold text-foreground text-sm mb-3 leading-snug">{b.name}</h3>
+
+                    <div className="space-y-1.5 text-xs text-muted-foreground mb-3">
+                      <div className="flex items-center gap-1.5">
+                        <CalendarDays size={11} />
+                        <span>{new Date(b.startDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                        <span className="text-muted-foreground/40">→</span>
+                        <span>{new Date(b.endDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <Users size={11} />
+                        <span>{seatsRemaining} seats left of {b.totalSeats}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-emerald-500">
+                        <IndianRupee size={11} />
+                        <span>₹{b.fee?.toLocaleString('en-IN')}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 h-1 rounded-full bg-muted">
+                        <div
+                          className={`h-full rounded-full transition-all ${pct >= 90 ? 'bg-red-500' : 'bg-indigo-500'}`}
+                          style={{ width: `${pct}%` }}
+                        />
+                      </div>
+                      <span className="text-xs text-muted-foreground/60">{pct}%</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Payment modal */}

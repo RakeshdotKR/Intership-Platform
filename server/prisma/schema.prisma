@@ -46,6 +46,7 @@ model Batch {
   fee         Float         @default(0)
   courses     Course[]
   startDate   DateTime
+  endDate     DateTime      @default(now())
   totalSeats  Int           @default(100)
   status      BatchStatus   @default(NOT_STARTED)
   enrollments Enrollment[]

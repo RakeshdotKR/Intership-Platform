@@ -44,6 +44,11 @@ const BRANCHES = {
     'Civil Engineering (CE / CIVIL)',
     'Chemical Engineering (CHE)',
   ],
+  "Arts & Science":[
+    "BCA ( Bachelor of Computer Application)",
+    "MCA ( Master of Computer Application)",
+    "M.Tech ( Master of Technology )"
+  ]
 };
 
 const Year = ['1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year / Dual Degree'];

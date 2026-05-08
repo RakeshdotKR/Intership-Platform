@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { Skeleton } from '../../components/ui/skeleton';
-import { Users, IndianRupee, PlayCircle, CheckCircle, BookOpen, Calendar, ArrowRight, TrendingUp } from 'lucide-react';
+import { Users, IndianRupee, PlayCircle, CheckCircle, BookOpen, Calendar, ArrowRight, Clock } from 'lucide-react';
 import React from 'react';
 
 const StatCard = ({ icon: Icon, label, value, color, bg }) => (
@@ -52,7 +52,8 @@ const AdminDashboard = () => {
   const statCards = stats ? [
     { icon: Users, label: 'Total Students', value: stats.totalStudents, color: 'text-indigo-400', bg: 'bg-indigo-500/10' },
     { icon: IndianRupee, label: 'Total Revenue', value: `₹${(stats.totalRevenue || 0).toLocaleString('en-IN')}`, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
-    { icon: PlayCircle, label: 'Active Batches', value: stats.activeBatches, color: 'text-amber-400', bg: 'bg-amber-500/10' },
+    { icon: Clock, label: 'Upcoming Batches', value: stats.upcomingBatches, color: 'text-sky-400', bg: 'bg-sky-500/10' },
+    { icon: PlayCircle, label: 'Ongoing Batches', value: stats.ongoingBatches, color: 'text-amber-400', bg: 'bg-amber-500/10' },
     { icon: CheckCircle, label: 'Completed Batches', value: stats.completedBatches, color: 'text-blue-400', bg: 'bg-blue-500/10' },
   ] : [];
 
@@ -71,9 +72,9 @@ const AdminDashboard = () => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4 mb-8">
         {loading
-          ? Array.from({ length: 4 }).map((_, i) => (
+          ? Array.from({ length: 5 }).map((_, i) => (
               <Card key={i}><CardContent className="p-6"><Skeleton className="h-4 w-24 mb-4" /><Skeleton className="h-8 w-16" /></CardContent></Card>
             ))
           : statCards.map((s) => <StatCard key={s.label} {...s} />)

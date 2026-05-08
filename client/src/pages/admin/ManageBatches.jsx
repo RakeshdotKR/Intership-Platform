@@ -20,7 +20,7 @@ const STATUS_BADGE = {
   COMPLETED: { variant: 'success', label: 'Completed' },
 };
 
-const EMPTY_FORM = { name: '', description: '', fee: '', courseIds: [], startDate: '', totalSeats: '100' };
+const EMPTY_FORM = { name: '', description: '', fee: '', courseIds: [], startDate: '', endDate: '', totalSeats: '100', status: 'NOT_STARTED' };
 
 const ManageBatches = () => {
   const [batches, setBatches] = useState([]);
@@ -70,7 +70,9 @@ const ManageBatches = () => {
       fee: String(batch.fee),
       courseIds: batch.courses.map(c => c.id),
       startDate: batch.startDate ? new Date(batch.startDate).toISOString().split('T')[0] : '',
+      endDate: batch.endDate ? new Date(batch.endDate).toISOString().split('T')[0] : '',
       totalSeats: String(batch.totalSeats),
+      status: batch.status || 'NOT_STARTED',
     });
     setFormError('');
     setDialogOpen(true);
@@ -91,6 +93,7 @@ const ManageBatches = () => {
     if (!formData.name.trim()) return setFormError('Batch name is required.');
     if (formData.courseIds.length === 0) return setFormError('Select at least one course.');
     if (!formData.startDate) return setFormError('Start date is required.');
+    if (!formData.endDate) return setFormError('end date is required.');
 
     setSaving(true);
     try {
@@ -100,7 +103,9 @@ const ManageBatches = () => {
         fee: parseFloat(formData.fee) || 0,
         courseIds: formData.courseIds,
         startDate: formData.startDate,
+        endDate: formData.endDate,
         totalSeats: parseInt(formData.totalSeats) || 100,
+        status: formData.status,
       };
       if (editBatch) {
         await axios.put(`/api/batches/${editBatch.id}`, payload);
@@ -278,6 +283,9 @@ const ManageBatches = () => {
                   <span className="flex items-center gap-1.5"><Calendar size={12} />
                     {new Date(detailBatch.startDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
                   </span>
+                  <span className="flex items-center gap-1.5"><Calendar size={12} />
+                    {new Date(detailBatch.endDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+                  </span>
                   <span className="flex items-center gap-1.5"><Users size={12} />
                     {detailBatch.enrollments?.length || 0} / {detailBatch.totalSeats} seats
                   </span>
@@ -426,6 +434,15 @@ const ManageBatches = () => {
                   />
                 </div>
                 <div className="space-y-1.5">
+                  <Label>End Date *</Label>
+                  <Input
+                    type="date"
+                    value={formData.endDate}
+                    onChange={e => setFormData({ ...formData, endDate: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="space-y-1.5">
                   <Label>Total Seats *</Label>
                   <Input
                     type="number"
@@ -434,6 +451,18 @@ const ManageBatches = () => {
                     onChange={e => setFormData({ ...formData, totalSeats: e.target.value })}
                     required
                   />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Status *</Label>
+                  <select
+                    value={formData.status}
+                    onChange={e => setFormData({ ...formData, status: e.target.value })}
+                    className="flex h-9 w-full bg-black rounded-md border border-input px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  >
+                    <option className='' value="NOT_STARTED">Upcoming</option>
+                    <option value="ONGOING">Ongoing</option>
+                    <option value="COMPLETED">Completed</option>
+                  </select>
                 </div>
               </div>
 

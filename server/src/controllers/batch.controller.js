@@ -47,7 +47,7 @@ const getBatchesByCourse = async (req, res) => {
 
 const createBatch = async (req, res) => {
   try {
-    const { name, description, fee, courseIds, startDate, totalSeats } = req.body;
+    const { name, description, fee, courseIds, startDate, totalSeats, endDate, status } = req.body;
 
     if (!name || !name.trim()) {
       return res.status(400).json({ error: 'Batch name is required' });
@@ -56,6 +56,9 @@ const createBatch = async (req, res) => {
       return res.status(400).json({ error: 'At least one course is required' });
     }
 
+    const validStatuses = ['NOT_STARTED', 'ONGOING', 'COMPLETED'];
+    const batchStatus = validStatuses.includes(status) ? status : 'NOT_STARTED';
+
     const batch = await prisma.batch.create({
       data: {
         name: name.trim(),
@@ -63,7 +66,9 @@ const createBatch = async (req, res) => {
         fee: parseFloat(fee) || 0,
         courses: { connect: courseIds.map(id => ({ id: parseInt(id) })) },
         startDate: new Date(startDate),
+        endDate: new Date(endDate),
         totalSeats: parseInt(totalSeats) || 100,
+        status: batchStatus,
       },
       include: BATCH_INCLUDE,
     });
@@ -81,7 +86,9 @@ const createBatch = async (req, res) => {
 const updateBatch = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, fee, courseIds, startDate, totalSeats } = req.body;
+    const { name, description, fee, courseIds, startDate, totalSeats, endDate, status } = req.body;
+
+    const validStatuses = ['NOT_STARTED', 'ONGOING', 'COMPLETED'];
 
     const batch = await prisma.batch.update({
       where: { id: parseInt(id) },
@@ -91,7 +98,9 @@ const updateBatch = async (req, res) => {
         ...(fee !== undefined && { fee: parseFloat(fee) }),
         ...(courseIds && { courses: { set: courseIds.map(id => ({ id: parseInt(id) })) } }),
         ...(startDate && { startDate: new Date(startDate) }),
+        ...(endDate && { endDate: new Date(endDate) }),
         ...(totalSeats && { totalSeats: parseInt(totalSeats) }),
+        ...(status && validStatuses.includes(status) && { status }),
       },
       include: BATCH_INCLUDE,
     });
