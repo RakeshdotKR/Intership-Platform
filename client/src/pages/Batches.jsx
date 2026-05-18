@@ -133,13 +133,6 @@ const Batches = () => {
 
       {/* Content */}
       <div className="container mx-auto px-4 sm:px-6 py-10">
-        {/* {!loading && (
-          <p className="text-sm text-muted-foreground mb-6">
-            {filtered.length} batch{filtered.length !== 1 ? 'es' : ''} available
-            {search && <span> for "<span className="text-foreground/70">{search}</span>"</span>}
-          </p>
-        )} */}
-
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.from({ length: 6 }).map((_, i) => <BatchSkeleton key={i} />)}
@@ -149,7 +142,7 @@ const Batches = () => {
             <div className="w-16 h-16 rounded-2xl bg-muted/50 border border-border flex items-center justify-center mb-4">
               <Calendar size={24} className="text-muted-foreground/30" />
             </div>
-            <h3 className="text-lg font-medium text-foreground mb-2">No batches found</h3>  
+            <h3 className="text-lg font-medium text-foreground mb-2">No batches found</h3>
             <p className="text-sm text-muted-foreground">
               {search ? `No results for "${search}".` : 'No active batches available right now.'}
             </p>
@@ -233,12 +226,18 @@ const Batches = () => {
       {/* Enroll Modal */}
       {enrollTarget && (
         <>
-          <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm" onClick={() => !enrolling && setEnrollTarget(null)} />
+          <div
+            className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+            onClick={() => !enrolling && setEnrollTarget(null)}
+          />
           <div className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-card p-6 shadow-2xl">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-semibold text-foreground">Complete Enrollment</h2>
               {!enrolling && (
-                <button onClick={() => setEnrollTarget(null)} className="text-muted-foreground hover:text-foreground p-1 rounded-lg hover:bg-accent transition-colors">
+                <button
+                  onClick={() => setEnrollTarget(null)}
+                  className="text-muted-foreground hover:text-foreground p-1 rounded-lg hover:bg-accent transition-colors"
+                >
                   <X size={16} />
                 </button>
               )}
@@ -252,23 +251,54 @@ const Batches = () => {
               </div>
             ) : (
               <>
+                {/* Summary rows */}
                 <div className="space-y-3 mb-6">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Course</span>
+                    <span className="text-foreground font-medium text-right max-w-[60%]">
+                      {enrollTarget.courses?.map(c => c.title).join(', ')}
+                    </span>
+                  </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Batch</span>
                     <span className="text-foreground font-medium">{enrollTarget.name}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Courses</span>
-                    <span className="text-foreground/70 text-right max-w-[60%]">
-                      {enrollTarget.courses?.map(c => c.title).join(', ')}
+                    <span className="text-muted-foreground">Duration</span>
+                    <span className="text-foreground font-medium">
+                      {enrollTarget.startDate && enrollTarget.endDate
+                        ? Math.ceil(
+                            (new Date(enrollTarget.endDate) - new Date(enrollTarget.startDate))
+                            / (1000 * 60 * 60 * 24 * 30)
+                          ) + ' months'
+                        : '—'}
                     </span>
                   </div>
                   <Separator />
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Total Amount</span>
-                    <span className="text-foreground font-bold text-lg">₹{enrollTarget.fee?.toLocaleString('en-IN')}</span>
+                    <span className="text-foreground font-bold text-lg">
+                      ₹{enrollTarget.fee?.toLocaleString('en-IN')}
+                    </span>
                   </div>
                 </div>
+
+                {/* QR Code */}
+                {enrollTarget.QrImage && (
+                  <div className="flex flex-col items-center gap-2 mb-6">
+                    <p className="text-sm text-muted-foreground">Scan to pay</p>
+                    <img
+                      src={enrollTarget.QrImage}
+                      alt="Payment QR"
+                      className="w-48 h-48 object-contain rounded-xl border border-border p-2 bg-white"
+                    />
+                    <p className="text-xs text-center text-muted-foreground leading-relaxed">
+                      Scan and make payment. Once completed, await confirmation from admin.
+                      <br />
+                      <span className="text-muted-foreground/60">Confirmation within 24 hours.</span>
+                    </p>
+                  </div>
+                )}
 
                 {enrollError && (
                   <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-sm text-red-400">
@@ -277,17 +307,25 @@ const Batches = () => {
                 )}
 
                 <div className="space-y-3">
-                  <Button variant="gradient" size="lg" className="w-full" onClick={confirmEnroll} disabled={enrolling}>
+                  <Button
+                    variant="gradient"
+                    size="lg"
+                    className="w-full"
+                    onClick={confirmEnroll}
+                    disabled={enrolling}
+                  >
                     {enrolling ? 'Processing...' : 'Confirm & Pay'}
                   </Button>
-                  <Button variant="outline" size="sm" className="w-full" onClick={() => setEnrollTarget(null)} disabled={enrolling}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                    onClick={() => setEnrollTarget(null)}
+                    disabled={enrolling}
+                  >
                     Cancel
                   </Button>
                 </div>
-                <p className="text-xs text-center text-muted-foreground/60 mt-3 flex items-center justify-center gap-1">
-                  <Shield size={11} />
-                  Demo payment — no real charge
-                </p>
               </>
             )}
           </div>

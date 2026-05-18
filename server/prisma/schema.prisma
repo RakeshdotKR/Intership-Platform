@@ -46,6 +46,7 @@ model Batch {
   fee         Float         @default(0)
   courses     Course[]
   startDate   DateTime
+  QrImage     String        @default("https://static.vecteezy.com/system/resources/previews/027/052/565/non_2x/computer-futuristic-high-tech-circuit-board-with-microcircuits-and-electronic-chips-with-transistors-and-resistors-ai-generated-free-photo.jpg")
   endDate     DateTime      @default(now())
   totalSeats  Int           @default(100)
   status      BatchStatus   @default(NOT_STARTED)
@@ -61,9 +62,9 @@ enum BatchStatus {
 
 model Enrollment {
   id        Int               @id @default(autoincrement())
-  student   User              @relation(fields: [studentId], references: [id])
+  student   User              @relation(fields: [studentId], references: [id],onDelete: Cascade,onUpdate: Cascade )
   studentId Int
-  batch     Batch             @relation(fields: [batchId], references: [id])
+  batch     Batch             @relation(fields: [batchId], references: [id],onDelete: Cascade,onUpdate: Cascade)
   batchId   Int
   payment   Payment?
   createdAt DateTime          @default(now())
@@ -71,7 +72,7 @@ model Enrollment {
 
 model Payment {
   id            Int           @id @default(autoincrement())
-  enrollment    Enrollment    @relation(fields: [enrollmentId], references: [id])
+  enrollment    Enrollment    @relation(fields: [enrollmentId], references: [id],onDelete: Cascade,onUpdate: Cascade)
   enrollmentId  Int           @unique
   amount        Float
   status        PaymentStatus @default(PENDING)

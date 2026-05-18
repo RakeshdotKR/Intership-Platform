@@ -1,6 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
-
-const prisma = new PrismaClient();
+const prisma = require("../config/prisma");
 
 const BATCH_INCLUDE = {
   courses: true,
@@ -47,7 +45,7 @@ const getBatchesByCourse = async (req, res) => {
 
 const createBatch = async (req, res) => {
   try {
-    const { name, description, fee, courseIds, startDate, totalSeats, endDate, status } = req.body;
+    const { name, description, fee, courseIds, startDate, totalSeats, endDate, status , QrImage } = req.body;
 
     if (!name || !name.trim()) {
       return res.status(400).json({ error: 'Batch name is required' });
@@ -69,6 +67,7 @@ const createBatch = async (req, res) => {
         endDate: new Date(endDate),
         totalSeats: parseInt(totalSeats) || 100,
         status: batchStatus,
+        QrImage: QrImage?.trim() || "https://static.vecteezy.com/system/resources/previews/027/052/565/non_2x/computer-futuristic-high-tech-circuit-board-with-microcircuits-and-electronic-chips-with-transistors-and-resistors-ai-generated-free-photo.jpg",
       },
       include: BATCH_INCLUDE,
     });
@@ -86,7 +85,7 @@ const createBatch = async (req, res) => {
 const updateBatch = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, fee, courseIds, startDate, totalSeats, endDate, status } = req.body;
+    const { name, description, fee, courseIds, startDate, totalSeats, endDate, status , QrImage } = req.body;
 
     const validStatuses = ['NOT_STARTED', 'ONGOING', 'COMPLETED'];
 
@@ -101,6 +100,7 @@ const updateBatch = async (req, res) => {
         ...(endDate && { endDate: new Date(endDate) }),
         ...(totalSeats && { totalSeats: parseInt(totalSeats) }),
         ...(status && validStatuses.includes(status) && { status }),
+        ...(QrImage && { QrImage: QrImage.trim() }),
       },
       include: BATCH_INCLUDE,
     });

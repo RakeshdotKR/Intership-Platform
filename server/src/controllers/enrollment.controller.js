@@ -1,8 +1,9 @@
-const { PrismaClient } = require('@prisma/client');
+const prisma = require("../config/prisma");
 
-const prisma = new PrismaClient();
 
 const BATCH_INCLUDE = { courses: true };
+
+// enrollment.controller.js
 
 const enrollInBatch = async (req, res) => {
   try {
@@ -19,7 +20,7 @@ const enrollInBatch = async (req, res) => {
 
     const batch = await prisma.batch.findUnique({
       where: { id: parseInt(batchId) },
-      include: { enrollments: true, ...BATCH_INCLUDE },
+      include: { enrollments: true, courses: true },
     });
 
     if (!batch) {
@@ -30,12 +31,34 @@ const enrollInBatch = async (req, res) => {
       return res.status(400).json({ error: 'Batch is full' });
     }
 
-    const enrollment = await prisma.enrollment.create({
-      data: { studentId, batchId: parseInt(batchId) },
-      include: { batch: { include: BATCH_INCLUDE } },
+    const { enrollment, payment } = await prisma.$transaction(async (tx) => {
+      const enrollment = await tx.enrollment.create({
+        data: { studentId, batchId: parseInt(batchId) },
+        include: { batch: { include: { courses: true } } },
+      });
+
+      const payment = await tx.payment.create({
+        data: {
+          enrollmentId: enrollment.id,
+          amount: batch.fee ?? 0,  // ✅ FIXED: Use batch.fee directly
+          status: 'PENDING',
+          transactionId: `TXN_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        },
+      });
+
+      return { enrollment, payment };
     });
 
-    res.status(201).json({ message: 'Enrolled successfully', enrollment });
+    res.status(201).json({
+      message: 'Enrolled successfully. Payment pending admin approval.',
+      enrollment,
+      payment: {
+        id: payment.id,
+        amount: payment.amount,
+        transactionId: payment.transactionId,
+        status: payment.status,
+      },
+    });
   } catch (error) {
     console.error('Enrollment error:', error);
     res.status(500).json({ error: 'Failed to enroll' });
