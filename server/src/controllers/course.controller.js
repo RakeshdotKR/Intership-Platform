@@ -33,7 +33,7 @@ const getAllCourses = async (req, res) => {
     res.json({ courses: coursesWithStats });
   } catch (error) {
     console.error('Get courses error:', error);
-    res.status(500).json({ error: 'Failed to fetch courses' });
+    res.status(500).json({ error: 'Failed to fetch courses' , message: error.message });
   }
 };
 
@@ -76,7 +76,7 @@ const getCourseById = async (req, res) => {
     res.json({ course: courseWithStats });
   } catch (error) {
     console.error('Get course error:', error);
-    res.status(500).json({ error: 'Failed to fetch course' });
+    res.status(500).json({ error: 'Failed to fetch course', message: error.message });
   }
 };
 
@@ -99,7 +99,7 @@ const createCourse = async (req, res) => {
     res.status(201).json({ course });
   } catch (error) {
     console.error('Create course error:', error);
-    res.status(500).json({ error: 'Failed to create course' });
+    res.status(500).json({ error: 'Failed to create course', message: error.message });
   }
 };
 
@@ -124,7 +124,7 @@ const updateCourse = async (req, res) => {
     res.json({ course });
   } catch (error) {
     console.error('Update course error:', error);
-    res.status(500).json({ error: 'Failed to update course' });
+    res.status(500).json({ error: 'Failed to update course', message: error.message });
   }
 };
 
@@ -139,7 +139,7 @@ const deleteCourse = async (req, res) => {
     res.json({ message: 'Course deleted successfully' });
   } catch (error) {
     console.error('Delete course error:', error);
-    res.status(500).json({ error: 'Failed to delete course' });
+    res.status(500).json({ error: 'Failed to delete course', message: error.message });
   }
 };
 

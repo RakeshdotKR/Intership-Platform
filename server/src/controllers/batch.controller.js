@@ -19,7 +19,7 @@ const getAllBatches = async (req, res) => {
     res.json({ batches: batchesWithStats });
   } catch (error) {
     console.error('Get all batches error:', error);
-    res.status(500).json({ error: 'Failed to fetch batches' });
+    res.status(500).json({ error: 'Failed to fetch batches' ,message: error.message});
   }
 };
 
@@ -39,7 +39,7 @@ const getBatchesByCourse = async (req, res) => {
     res.json({ batches: batchesWithStats });
   } catch (error) {
     console.error('Get batches by course error:', error);
-    res.status(500).json({ error: 'Failed to fetch batches' });
+    res.status(500).json({ error: 'Failed to fetch batches', message: error.message });
   }
 };
 
@@ -78,7 +78,7 @@ const createBatch = async (req, res) => {
       return res.status(400).json({ error: 'A batch with this name already exists' });
     }
     console.error('Create batch error:', error);
-    res.status(500).json({ error: 'Failed to create batch' });
+    res.status(500).json({ error: 'Failed to create batch', message: error.message });
   }
 };
 
@@ -111,7 +111,7 @@ const updateBatch = async (req, res) => {
       return res.status(400).json({ error: 'A batch with this name already exists' });
     }
     console.error('Update batch error:', error);
-    res.status(500).json({ error: 'Failed to update batch' });
+    res.status(500).json({ error: 'Failed to update batch', message: error.message });
   }
 };
 
@@ -122,7 +122,7 @@ const deleteBatch = async (req, res) => {
     res.json({ message: 'Batch deleted successfully' });
   } catch (error) {
     console.error('Delete batch error:', error);
-    res.status(500).json({ error: 'Failed to delete batch' });
+    res.status(500).json({ error: 'Failed to delete batch', message: error.message });
   }
 };
 
@@ -145,7 +145,7 @@ const updateBatchStatus = async (req, res) => {
     res.json({ batch });
   } catch (error) {
     console.error('Update batch status error:', error);
-    res.status(500).json({ error: 'Failed to update batch status' });
+    res.status(500).json({ error: 'Failed to update batch status', message: error.message });
   }
 };
 

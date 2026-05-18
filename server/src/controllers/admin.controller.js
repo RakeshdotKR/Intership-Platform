@@ -18,7 +18,7 @@ const getStats = async (req, res) => {
     res.json({ stats: { totalStudents, totalRevenue, upcomingBatches, ongoingBatches, completedBatches, totalBatches } });
   } catch (error) {
     console.error('Get stats error:', error);
-    res.status(500).json({ error: 'Failed to fetch stats' });
+    res.status(500).json({ error: 'Failed to fetch stats',message: error.message});
   }
 };
 
@@ -48,7 +48,7 @@ const getAllStudents = async (req, res) => {
     res.json({ students });
   } catch (error) {
     console.error('Get students error:', error);
-    res.status(500).json({ error: 'Failed to fetch students' });
+    res.status(500).json({ error: 'Failed to fetch students',message: error.message });
   }
 };
 
@@ -79,7 +79,7 @@ const exportStudentsByBatch = async (req, res) => {
     res.send(csvHeaders + csvRows);
   } catch (error) {
     console.error('Export students error:', error);
-    res.status(500).json({ error: 'Failed to export students' });
+    res.status(500).json({ error: 'Failed to export students',message: error.message });
   }
 };
 
@@ -101,7 +101,7 @@ const createStudent = async (req, res) => {
     res.status(201).json({ student });
   } catch (error) {
     console.error('Create student error:', error);
-    res.status(500).json({ error: 'Failed to create student' });
+    res.status(500).json({ error: 'Failed to create student', message: error.message });
   }
 };
 
@@ -111,7 +111,7 @@ const updateStudent = async (req, res) => {
     const { name, email, phone, college, branch, year } = req.body;
     const existing = await prisma.user.findFirst({ where: { email, NOT: { id: parseInt(id) } } });
     if (existing) {
-      return res.status(400).json({ error: 'Email already in use by another account.' });
+      return res.status(400).json({ error: 'Email already in use by another account.', message: error.message });
     }
     const student = await prisma.user.update({
       where: { id: parseInt(id) },
@@ -121,7 +121,7 @@ const updateStudent = async (req, res) => {
     res.json({ student });
   } catch (error) {
     console.error('Update student error:', error);
-    res.status(500).json({ error: 'Failed to update student' });
+    res.status(500).json({ error: 'Failed to update student', message: error.message });
   }
 };
 
@@ -136,7 +136,7 @@ const deleteStudent = async (req, res) => {
     res.json({ message: 'Student deleted successfully' });
   } catch (error) {
     console.error('Delete student error:', error);
-    res.status(500).json({ error: 'Failed to delete student' });
+    res.status(500).json({ error: 'Failed to delete student', message: error.message });
   }
 };
 

@@ -41,7 +41,7 @@ const initiatePayment = async (req, res) => {
     });
   } catch (error) {
     console.error('Initiate payment error:', error);
-    res.status(500).json({ error: 'Failed to initiate payment' });
+    res.status(500).json({ error: 'Failed to initiate payment', message: error.message });
   }
 };
 
@@ -92,7 +92,7 @@ const confirmPayment = async (req, res) => {
     });
   } catch (error) {
     console.error('Confirm payment error:', error);
-    res.status(500).json({ error: 'Failed to confirm payment' });
+    res.status(500).json({ error: 'Failed to confirm payment', message: error.message });
   }
 };
 
@@ -114,7 +114,7 @@ const getPendingPayments = async (req, res) => {
     res.json({ payments });
   } catch (error) {
     console.error('Get pending payments error:', error);
-    res.status(500).json({ error: 'Failed to fetch pending payments' });
+    res.status(500).json({ error: 'Failed to fetch pending payments', message: error.message });
   }
 };
 
@@ -143,7 +143,7 @@ const rejectPayment = async (req, res) => {
     res.json({ message: 'Payment rejected', payment: updated });
   } catch (error) {
     console.error('Reject payment error:', error);
-    res.status(500).json({ error: 'Failed to reject payment' });
+    res.status(500).json({ error: 'Failed to reject payment', message: error.message });
   }
 };
 

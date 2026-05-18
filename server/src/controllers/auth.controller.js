@@ -50,7 +50,7 @@ const register = async (req, res) => {
     });
   } catch (error) {
     console.error('Registration error:', error);
-    res.status(500).json({ error: 'Registration failed' });
+    res.status(500).json({ error: 'Registration failed', message: error.message });
   }
 };
 
@@ -92,7 +92,7 @@ const login = async (req, res) => {
     });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ error: 'Login failed' });
+    res.status(500).json({ error: 'Login failed',message: error.message });
   }
 };
 
@@ -120,7 +120,7 @@ const getMe = async (req, res) => {
     res.json({ user });
   } catch (error) {
     console.error('Get me error:', error);
-    res.status(500).json({ error: 'Failed to get user data' });
+    res.status(500).json({ error: 'Failed to get user data' ,message: error.message });
   }
 };
 

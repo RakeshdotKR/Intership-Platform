@@ -61,7 +61,7 @@ const enrollInBatch = async (req, res) => {
     });
   } catch (error) {
     console.error('Enrollment error:', error);
-    res.status(500).json({ error: 'Failed to enroll' });
+    res.status(500).json({ error: 'Failed to enroll',message: error.message });
   }
 };
 
@@ -81,7 +81,7 @@ const getMyEnrollments = async (req, res) => {
     res.json({ enrollments });
   } catch (error) {
     console.error('Get enrollments error:', error);
-    res.status(500).json({ error: 'Failed to fetch enrollments' });
+    res.status(500).json({ error: 'Failed to fetch enrollments', message: error.message });
   }
 };
 
@@ -111,7 +111,7 @@ const getEnrollmentsByBatch = async (req, res) => {
     res.json({ enrollments });
   } catch (error) {
     console.error('Get batch enrollments error:', error);
-    res.status(500).json({ error: 'Failed to fetch enrollments' });
+    res.status(500).json({ error: 'Failed to fetch enrollments', message: error.message });
   }
 };
 
