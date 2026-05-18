@@ -23,6 +23,9 @@ import {
   CheckCircle2,
   XCircle,
   CreditCard,
+  Award,
+  Eye,
+  Download,
 } from "lucide-react";
 import React from "react";
 
@@ -86,9 +89,9 @@ const PaymentStatusBadge = ({ status }) => {
 // ─── Payment Status Banner ──────────────────────────────────────────────────────
 const PaymentStatusBanner = ({ payment, compact = false }) => {
   if (!payment) return null;
-  
+
   const cfg = PAYMENT_STATUS_CONFIG[payment.status] || PAYMENT_STATUS_CONFIG.PENDING;
-  
+
   if (payment.status === "SUCCESS") {
     return (
       <div className={`flex items-center gap-2 rounded-xl ${cfg.bg} border ${cfg.border} ${compact ? "px-3 py-2" : "px-4 py-3"}`}>
@@ -156,6 +159,65 @@ const PaymentStatusBanner = ({ payment, compact = false }) => {
         )}
       </div>
     </div>
+  );
+};
+
+// ─── Certificate Preview Modal ────────────────────────────────────────────────
+const CertificatePreviewModal = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+
+  return (
+    <>
+      <div
+        className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="relative w-full max-w-4xl max-h-[90vh] flex flex-col rounded-2xl border border-slate-200 bg-white shadow-2xl overflow-hidden dark:border-white/10 dark:bg-[#0d0d1a]">
+          {/* Header */}
+          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-white/8">
+            <div className="flex items-center gap-2">
+              <Award size={20} className="text-indigo-500" />
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
+                Sample Certificate
+              </h2>
+            </div>
+            <button
+              onClick={onClose}
+              className="rounded-lg p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors dark:text-white/40 dark:hover:text-white/80 dark:hover:bg-white/5"
+            >
+              <X size={18} />
+            </button>
+          </div>
+
+          {/* Certificate Image */}
+          <div className="overflow-y-auto flex-1 p-6 bg-slate-50 dark:bg-black/40">
+            <div className="max-w-3xl mx-auto">
+              <img
+                src="/certificate.jpeg"
+                alt="Sample Certificate"
+                className="w-full rounded-xl shadow-lg border border-slate-200 dark:border-white/10"
+              />
+              <p className="text-center text-sm text-slate-500 mt-4 dark:text-white/40">
+                This is a sample certificate you will receive upon successful completion of the program.
+              </p>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-slate-200 dark:border-white/8">
+            <Button variant="outline" size="sm" onClick={onClose}>
+              Close
+            </Button>
+            <a href="/certificate.jpeg" download="sample-certificate.jpeg">
+              <Button variant="gradient" size="sm" className="gap-2">
+                <Download size={14} /> Download Sample
+              </Button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 
@@ -367,6 +429,7 @@ const StudentDashboard = () => {
   const [enrollments, setEnrollments]         = useState([]);
   const [loading, setLoading]                 = useState(true);
   const [selectedEnrollment, setSelectedEnrollment] = useState(null);
+  const [certModalOpen, setCertModalOpen]     = useState(false);
 
   useEffect(() => {
     axios
@@ -378,7 +441,10 @@ const StudentDashboard = () => {
 
   useEffect(() => {
     const handleKey = (e) => {
-      if (e.key === "Escape") setSelectedEnrollment(null);
+      if (e.key === "Escape") {
+        setSelectedEnrollment(null);
+        setCertModalOpen(false);
+      }
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
@@ -434,8 +500,58 @@ const StudentDashboard = () => {
         </div>
       </section>
 
+      {/* ── Certificate Preview Section ── */}
+      <section className="container mx-auto px-4 sm:px-6 py-8">
+        <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-amber-50/50 to-orange-50/50 dark:from-amber-500/5 dark:to-orange-500/5 dark:border-white/8 overflow-hidden">
+          <div className="flex flex-col md:flex-row items-center gap-6 p-6 md:p-8">
+            {/* Certificate Thumbnail */}
+            <div className="relative shrink-0 group cursor-pointer" onClick={() => setCertModalOpen(true)}>
+              <div className="w-48 h-32 rounded-xl overflow-hidden border-2 border-amber-200 shadow-lg dark:border-amber-500/30">
+                <img
+                  src="/certificate.jpeg"
+                  alt="Sample Certificate"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                <Eye size={24} className="text-white drop-shadow-lg" />
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 text-center md:text-left">
+              <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
+                <Award size={20} className="text-amber-500" />
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                  Earn a Verified Certificate
+                </h3>
+              </div>
+              <p className="text-sm text-slate-600 dark:text-white/60 mb-4 max-w-lg">
+                Complete your enrolled programs and receive an industry-recognized certificate. 
+                Preview what your certificate will look like upon successful completion.
+              </p>
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-2"
+                  onClick={() => setCertModalOpen(true)}
+                >
+                  <Eye size={14} /> Preview Certificate
+                </Button>
+                <a href="/certificate.jpeg" download="sample-certificate.jpeg">
+                  <Button variant="gradient" size="sm" className="gap-2">
+                    <Download size={14} /> Download Sample
+                  </Button>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Content ── */}
-      <div className="container mx-auto px-4 sm:px-6 py-10">
+      <div className="container mx-auto px-4 sm:px-6 py-6">
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {Array.from({ length: 3 }).map((_, i) => (
@@ -555,6 +671,12 @@ const StudentDashboard = () => {
           </>
         )}
       </div>
+
+      {/* ── Certificate Preview Modal ── */}
+      <CertificatePreviewModal
+        isOpen={certModalOpen}
+        onClose={() => setCertModalOpen(false)}
+      />
 
       {/* ── Detail Modal ── */}
       {selectedEnrollment && (
