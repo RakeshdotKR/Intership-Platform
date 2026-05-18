@@ -209,11 +209,11 @@ const CertificatePreviewModal = ({ isOpen, onClose }) => {
             <Button variant="outline" size="sm" onClick={onClose}>
               Close
             </Button>
-            <a href="/certificate.jpeg" download="sample-certificate.jpeg">
+            {/* <a href="/certificate.jpeg" download="sample-certificate.jpeg">
               <Button variant="gradient" size="sm" className="gap-2">
                 <Download size={14} /> Download Sample
               </Button>
-            </a>
+            </a> */}
           </div>
         </div>
       </div>
@@ -539,11 +539,11 @@ const StudentDashboard = () => {
                 >
                   <Eye size={14} /> Preview Certificate
                 </Button>
-                <a href="/certificate.jpeg" download="sample-certificate.jpeg">
+                {/* <a href="/certificate.jpeg" download="sample-certificate.jpeg">
                   <Button variant="gradient" size="sm" className="gap-2">
                     <Download size={14} /> Download Sample
                   </Button>
-                </a>
+                </a> */}
               </div>
             </div>
           </div>
