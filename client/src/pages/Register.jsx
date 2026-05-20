@@ -124,10 +124,10 @@ const Register = () => {
             ))}
           </div>
 
-          <div className="mt-10 p-4 rounded-xl bg-white border border-slate-200 dark:bg-white/5 dark:border-white/8">
+          {/* <div className="mt-10 p-4 rounded-xl bg-white border border-slate-200 dark:bg-white/5 dark:border-white/8">
             <p className="text-sm font-medium text-slate-900 mb-1 dark:text-white">One-time fee: ₹4,500</p>
             <p className="text-xs text-slate-500 dark:text-white/40">Includes certificate + placement support</p>
-          </div>
+          </div> */}
         </div>
       </div>
 
