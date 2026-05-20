@@ -48,7 +48,7 @@ const TESTIMONIALS = [
   },
 ];
 
-const TECH = ['React', 'Node.js', 'Python', 'PostgreSQL', 'MongoDB', 'Git', 'Docker', 'AWS', 'Tailwind CSS', 'TypeScript'];
+const TECH = ['React', 'Node.js', 'Python', 'PostgreSQL', 'MongoDB', 'Git', 'Docker', 'AWS', 'Tailwind CSS', 'TypeScript', 'DevOps', 'AWS','Docker','Kubernetes'];
 
 export default function Home() {
   return (
@@ -63,7 +63,7 @@ export default function Home() {
         <div className="relative container mx-auto px-4 sm:px-6 py-20 text-center">
           <Badge variant="default" className="mb-6 gap-1.5 px-3 py-1.5 text-xs">
             <Sparkles size={11} />
-            Limited seats — Batch starting soon
+            Limited seats — Batches starting soon
           </Badge>
 
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-slate-900 mb-6 tracking-tight leading-tight dark:text-white">
@@ -75,7 +75,7 @@ export default function Home() {
 
           <p className="text-lg sm:text-xl text-slate-500 mb-10 max-w-2xl mx-auto leading-relaxed dark:text-white/50">
             Join 500+ students who transformed their careers through our comprehensive,
-            industry-led internship programs. Build. Learn. Get Hired.
+            industry-led internship programs. Build. Learn. Excel.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
@@ -94,7 +94,7 @@ export default function Home() {
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-slate-500 dark:text-white/40">
-            {['No prior experience needed', 'Certificate on completion', 'Placement support'].map((item) => (
+            {['No prior experience needed', 'Certificate on completion'].map((item) => (
               <div key={item} className="flex items-center gap-1.5">
                 <CheckCircle2 size={14} className="text-emerald-500 dark:text-emerald-400" />
                 {item}
