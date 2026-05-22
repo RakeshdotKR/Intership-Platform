@@ -41,7 +41,7 @@ const Footer = () => {
           </div>
 
           {/* Programs */}
-          <div>
+          {/* <div>
             <h4 className="text-sm font-semibold text-slate-700 mb-4 dark:text-white/80">Programs</h4>
             <ul className="space-y-2.5">
               {['Web Development', 'Data Science', 'Digital Marketing', 'UI/UX Design', 'Machine Learning'].map((item) => (
@@ -52,7 +52,7 @@ const Footer = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
 
           {/* Company */}
           <div>
@@ -79,7 +79,7 @@ const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-start gap-2.5 text-sm text-slate-500 dark:text-white/40">
                 <Mail size={14} className="mt-0.5 shrink-0 text-indigo-500 dark:text-indigo-400/60" />
-                <span>support@internhub.in</span>
+                <span>support@merav.co.in</span>
               </li>
               {/* <li className="flex items-start gap-2.5 text-sm text-slate-500 dark:text-white/40">
                 <Phone size={14} className="mt-0.5 shrink-0 text-indigo-500 dark:text-indigo-400/60" />
