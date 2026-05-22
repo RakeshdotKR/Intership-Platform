@@ -133,7 +133,7 @@ export default function Home() {
               Industry-aligned programs designed to make you job-ready from day one.
             </p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {/* <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {CATEGORIES.map(({ icon: Icon, label, color, border }) => (
               <Link key={label} to="/courses">
                 <Card className={`group cursor-pointer hover:border-indigo-500/30 transition-all duration-300 hover:-translate-y-1 ${border}`}>
@@ -151,7 +151,7 @@ export default function Home() {
                 </Card>
               </Link>
             ))}
-          </div>
+          </div> */}
         </div>
       </section>
 
