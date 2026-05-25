@@ -59,17 +59,31 @@ const Footer = () => {
             <h4 className="text-sm font-semibold text-slate-700 mb-4 dark:text-white/80">Company</h4>
             <ul className="space-y-2.5">
               {[
-                { label: 'About Us', to: '/' },
-                { label: 'Courses', to: '/courses' },
-                { label: 'Register', to: '/register' },
-                { label: 'Login', to: '/login' },
-              ].map(({ label, to }) => (
-                <li key={label}>
-                  <Link to={to} className="text-sm text-slate-500 hover:text-indigo-600 transition-colors dark:text-white/40 dark:hover:text-indigo-400">
-                    {label}
-                  </Link>
-                </li>
-              ))}
+  { label: 'About Us', to: 'https://merav.co.in/', external: true },
+  { label: 'Courses', to: '/courses' },
+  { label: 'Register', to: '/register' },
+  { label: 'Login', to: '/login' },
+].map(({ label, to, external }) => (
+  <li key={label}>
+    {external ? (
+      <a
+        href={to}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-sm text-slate-500 hover:text-indigo-600 transition-colors dark:text-white/40 dark:hover:text-indigo-400"
+      >
+        {label}
+      </a>
+    ) : (
+      <Link
+        to={to}
+        className="text-sm text-slate-500 hover:text-indigo-600 transition-colors dark:text-white/40 dark:hover:text-indigo-400"
+      >
+        {label}
+      </Link>
+    )}
+  </li>
+))}
             </ul>
           </div>
 
