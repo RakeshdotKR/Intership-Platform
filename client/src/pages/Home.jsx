@@ -122,7 +122,7 @@ export default function Home() {
       </section>
 
       {/* Categories */}
-      <section className="py-20">
+        {/* <section className="py-20">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <Badge variant="secondary" className="mb-4">Programs</Badge>
@@ -133,7 +133,7 @@ export default function Home() {
               Industry-aligned programs designed to make you job-ready from day one.
             </p>
           </div>
-          {/* <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {CATEGORIES.map(({ icon: Icon, label, color, border }) => (
               <Link key={label} to="/courses">
                 <Card className={`group cursor-pointer hover:border-indigo-500/30 transition-all duration-300 hover:-translate-y-1 ${border}`}>
@@ -151,9 +151,9 @@ export default function Home() {
                 </Card>
               </Link>
             ))}
-          </div> */}
+          </div> 
         </div>
-      </section>
+      </section>*/}
 
       {/* Tech Stack */}
       <section className="py-16 border-y border-slate-200 overflow-hidden dark:border-white/6">
