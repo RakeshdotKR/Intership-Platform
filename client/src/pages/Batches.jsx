@@ -185,28 +185,19 @@ const Batches = () => {
                     </div>
 
                     {/* Meta */}
+                   {/* Meta */}
                     <div className="grid grid-cols-2 gap-y-2 gap-x-4 text-xs text-muted-foreground mb-5">
-                      {/* <span className="flex items-center gap-1.5">
-                        <IndianRupee size={11} className="text-emerald-500" />
-                        <span className="text-emerald-500 font-medium">₹{batch.fee?.toLocaleString('en-IN')}</span>
-                      </span> */}
-                      <span className="flex items-center gap-2 flex-wrap">
-                        {/* Original Price */}
+                      <span className="flex items-center gap-2 flex-wrap col-span-2">
                         <span className="line-through text-muted-foreground">
                           ₹5,000
                         </span>
-                      
-                        {/* Discount Badge */}
+                    
                         <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-red-500/10 text-red-500 border border-red-500/20">
-                          ~33% OFF
+                          33% OFF
                         </span>
-                      
-                        {/* Discounted Price */}
-                        <span className="flex items-center gap-1">
-                          <IndianRupee size={11} className="text-emerald-500" />
-                          <span className="text-emerald-500 font-medium">
-                            {batch.fee?.toLocaleString('en-IN')}
-                          </span>
+                    
+                        <span className="text-emerald-500 font-medium">
+                          ₹{batch.fee?.toLocaleString('en-IN')}
                         </span>
                       </span>
                       <span className="flex items-center gap-1.5">
@@ -294,24 +285,25 @@ const Batches = () => {
                     </span>
                   </div>
                   <Separator />
-                <div className="flex justify-between items-start">
-                    <span className="text-muted-foreground">Total Amount</span>
-                  
-                    <div className="flex flex-col items-end">
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm text-muted-foreground line-through">
-                          ₹5,000
-                        </span>
-                  
-                        <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-red-500/10 text-red-500 border border-red-500/20">
-                          ~33% OFF
-                        </span>
-                      </div>
-                  
-                      <span className="text-foreground font-bold text-lg">
-                        ₹{enrollTarget.fee?.toLocaleString('en-IN')}
-                      </span>
-                    </div>
+             <div className="flex justify-between items-start">
+                <span className="text-muted-foreground">Total Amount</span>
+              
+                <div className="flex flex-col items-end">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-muted-foreground line-through">
+                      ₹5,000
+                    </span>
+              
+                    <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-red-500/10 text-red-500 border border-red-500/20">
+                      33% OFF
+                    </span>
+                  </div>
+              
+                  <span className="text-emerald-500 font-bold text-lg">
+                    ₹{enrollTarget.fee?.toLocaleString('en-IN')}
+                  </span>
+                </div>
+              </div>
                   </div>
 
                 {/* QR Code */}
