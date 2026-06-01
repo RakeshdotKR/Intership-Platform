@@ -186,9 +186,28 @@ const Batches = () => {
 
                     {/* Meta */}
                     <div className="grid grid-cols-2 gap-y-2 gap-x-4 text-xs text-muted-foreground mb-5">
-                      <span className="flex items-center gap-1.5">
+                      {/* <span className="flex items-center gap-1.5">
                         <IndianRupee size={11} className="text-emerald-500" />
                         <span className="text-emerald-500 font-medium">₹{batch.fee?.toLocaleString('en-IN')}</span>
+                      </span> */}
+                      <span className="flex items-center gap-2 flex-wrap">
+                        {/* Original Price */}
+                        <span className="line-through text-muted-foreground">
+                          ₹5,000
+                        </span>
+                      
+                        {/* Discount Badge */}
+                        <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-red-500/10 text-red-500 border border-red-500/20">
+                          ~33% OFF
+                        </span>
+                      
+                        {/* Discounted Price */}
+                        <span className="flex items-center gap-1">
+                          <IndianRupee size={11} className="text-emerald-500" />
+                          <span className="text-emerald-500 font-medium">
+                            {batch.fee?.toLocaleString('en-IN')}
+                          </span>
+                        </span>
                       </span>
                       <span className="flex items-center gap-1.5">
                         <Users size={11} />
