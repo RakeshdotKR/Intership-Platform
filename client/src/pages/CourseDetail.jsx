@@ -497,10 +497,19 @@ const CourseDetail = () => {
                           {seatsRemaining} seats left of {b.totalSeats}
                         </span>
                       </div>
-                      <div className="flex items-center gap-1.5 text-emerald-500">
-                        <IndianRupee size={11} />
-                        <span>₹{b.fee?.toLocaleString("en-IN")}</span>
-                      </div>
+                     <div className="flex items-center gap-2 flex-wrap">
+                      <span className="line-through text-muted-foreground text-[11px]">
+                        ₹5,000
+                      </span>
+                    
+                      <span className="px-1.5 py-0.5 text-[9px] font-semibold rounded-full bg-red-500/10 text-red-500 border border-red-500/20">
+                        33% OFF
+                      </span>
+                    
+                      <span className="text-emerald-500 font-medium">
+                        ₹{b.fee?.toLocaleString("en-IN")}
+                      </span>
+                    </div>
                     </div>
 
                     <div className="flex items-center gap-2">
@@ -560,13 +569,26 @@ const CourseDetail = () => {
                 <span className="text-muted-foreground">{course.duration}</span>
               </div>
               <Separator />
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Total Amount</span>
-                <span className="text-foreground font-bold text-lg">
+              <div className="flex justify-between items-start">
+              <span className="text-muted-foreground">Total Amount</span>
+            
+              <div className="flex flex-col items-end">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground line-through">
+                    ₹5,000
+                  </span>
+            
+                  <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-red-500/10 text-red-500 border border-red-500/20">
+                    33% OFF
+                  </span>
+                </div>
+            
+                <span className="text-emerald-500 font-bold text-lg">
                   ₹{displayFee?.toLocaleString("en-IN")}
                 </span>
               </div>
             </div>
+                        </div>
 
             {/* QR Code */}
             {batch?.QrImage && (
