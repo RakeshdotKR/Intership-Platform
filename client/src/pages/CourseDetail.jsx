@@ -503,7 +503,7 @@ const CourseDetail = () => {
                       </span>
                     
                       <span className="px-1.5 py-0.5 text-[9px] font-semibold rounded-full bg-red-500/10 text-red-500 border border-red-500/20">
-                        33% OFF
+                        ~33% OFF
                       </span>
                     
                       <span className="text-emerald-500 font-medium">
@@ -579,7 +579,7 @@ const CourseDetail = () => {
                   </span>
             
                   <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-red-500/10 text-red-500 border border-red-500/20">
-                    33% OFF
+                    ~33% OFF
                   </span>
                 </div>
             
